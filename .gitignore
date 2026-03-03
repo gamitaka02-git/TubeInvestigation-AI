@@ -11,3 +11,4 @@ config.json
 .env
 
 # ビルド済みファイル
+.exe
