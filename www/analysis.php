@@ -1,10 +1,24 @@
 <?php
 require_once 'functions.php';
 require_once 'functions_ai.php';
+require_once __DIR__ . '/../src/LicenseManager.php';
 
 $config = load_config($config_file);
+$license_key = $config['license_key'] ?? '';
 $yt_key = $config['api_key'] ?? '';
 $gemini_key = $config['gemini_key'] ?? '';
+
+$licenseManager = new LicenseManager();
+$hwid = '';
+try {
+    $hwid = $licenseManager->getHwid();
+} catch (Exception $e) {
+    die("システムエラー: " . $e->getMessage());
+}
+
+if (!$license_key || !$hwid || !$licenseManager->authorize($license_key, $hwid)['success']) {
+    die("ライセンスが無効です。メイン画面から設定を確認してください。");
+}
 
 $video_id = $_GET['v'] ?? '';
 if (!$video_id)

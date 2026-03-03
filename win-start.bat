@@ -1,6 +1,6 @@
 @echo off
 set PHP_EXE=%~dp0php\php.exe
-set PHP_INI=%~dp0php\php.ini
+set PHP_INI=%~dp0php.ini
 set WWW_DIR=%~dp0www
 
 echo YouTubeリサーチツールを起動しています...

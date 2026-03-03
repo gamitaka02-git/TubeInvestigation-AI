@@ -8,7 +8,7 @@ echo "ブラウザで http://localhost:8000 を開きます..."
 
 # PHPビルトインサーバーをバックグラウンドで起動
 # wwwディレクトリをドキュメントルートにする
-php -S localhost:8000 -t www &
+php -c php.ini -S localhost:8000 -t www &
 PHP_PID=$!
 
 # 少し待ってからブラウザを開く

@@ -6,7 +6,7 @@ $config_file = __DIR__ . '/../config.json';
  */
 function load_config($path)
 {
-    $defaults = ['api_key' => '', 'gemini_key' => ''];
+    $defaults = ['license_key' => '', 'api_key' => '', 'gemini_key' => ''];
     if (!file_exists($path)) {
         save_config($path, $defaults);
         return $defaults;

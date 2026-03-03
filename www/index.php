@@ -1,13 +1,39 @@
 <?php
 require_once 'functions.php';
+require_once __DIR__ . '/../src/LicenseManager.php';
 
 $config = load_config($config_file);
+$license_key = $config['license_key'] ?? '';
 $api_key = $config['api_key'] ?? '';
 $gemini_key = $config['gemini_key'] ?? ''; // Geminiキーを読み込み
+
+$licenseManager = new LicenseManager();
+$hwid = '';
+$hwidError = '';
+try {
+    $hwid = $licenseManager->getHwid();
+} catch (Exception $e) {
+    $hwidError = $e->getMessage();
+}
+
+$is_licensed = false;
+$auth_error = '';
+if ($license_key && $hwid) {
+    $authResult = $licenseManager->authorize($license_key, $hwid);
+    $is_licensed = $authResult['success'];
+    if (!$is_licensed) {
+        $auth_error = $authResult['message'];
+    }
+} elseif (!$license_key) {
+    $auth_error = ''; // 初期状態や未設定時は単に入力を促す
+} elseif ($hwidError) {
+    $auth_error = 'システムエラー: ' . $hwidError;
+}
 
 // 設定保存処理
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_key'])) {
     save_config($config_file, [
+        'license_key' => trim($_POST['license_key']),
         'api_key' => trim($_POST['api_key']),
         'gemini_key' => trim($_POST['gemini_key']) // Geminiキーも保存
     ]);
@@ -61,12 +87,17 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv' && !empty($search_re
 
 <body>
     <div class="container container-wide">
-        <?php if (!$api_key || !$gemini_key || isset($_GET['edit_key'])): ?>
+        <?php if (!$is_licensed || !$api_key || !$gemini_key || isset($_GET['edit_key'])): ?>
             <div class="overlay">
                 <div class="modal">
-                    <h2>API 設定</h2>
+                    <h2>API & ライセンス設定</h2>
+                    <?php if ($auth_error && !isset($_GET['edit_key'])): ?>
+                        <div style="color: #d32f2f; background: #ffebee; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-weight: bold;">
+                            <?php echo htmlspecialchars($auth_error); ?>
+                        </div>
+                    <?php endif; ?>
                     <div class="setup-guide">
-                        <p>ツールを動作させるには2つのAPIキーが必要です。</p>
+                        <p>ツールを動作させるにはライセンスキーと2つのAPIキーが必要です。</p>
                         <div><a href="https://console.cloud.google.com/welcome" target="_blank" class="btn-guide">YouTube
                                 API ↗</a>　（Google Cloud Console）</div>
                         <div><a href="https://aistudio.google.com/app/apikey" target="_blank" class="btn-guide"
@@ -75,6 +106,12 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv' && !empty($search_re
                     </div>
                     <hr class="modal-divider">
                     <form method="POST">
+                        <div class="api-input">
+                            <label>License Key</label>
+                            <input type="password" name="license_key" value="<?php echo htmlspecialchars($license_key); ?>"
+                                placeholder="ライセンスキーを入力" required>
+                        </div>
+
                         <div class="api-input">
                             <label>YouTube API Key</label>
                             <input type="password" name="api_key" value="<?php echo htmlspecialchars($api_key); ?>"
