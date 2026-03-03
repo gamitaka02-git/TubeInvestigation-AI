@@ -1,0 +1,13 @@
+# 設定ファイル（APIキー等を含む場合）
+config.json
+
+
+# フォルダ
+/docs/
+
+# PHPの依存関係や一時ファイル
+/php/extras/ssl/openssl.cnf
+*.log
+.env
+
+# ビルド済みファイル
