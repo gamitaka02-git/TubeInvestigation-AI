@@ -7,7 +7,10 @@ $config_file = __DIR__ . '/../config.json';
 function load_config($path)
 {
     $defaults = ['api_key' => '', 'gemini_key' => ''];
-    if (!file_exists($path)) return $defaults;
+    if (!file_exists($path)) {
+        save_config($path, $defaults);
+        return $defaults;
+    }
     $config = json_decode(file_get_contents($path), true);
     return array_merge($defaults, $config);
 }
