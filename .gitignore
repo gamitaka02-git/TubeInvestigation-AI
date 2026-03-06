@@ -4,6 +4,7 @@ config.json
 
 # フォルダ
 /docs/
+/LP/
 
 # PHPの依存関係や一時ファイル
 /php/extras/ssl/openssl.cnf
