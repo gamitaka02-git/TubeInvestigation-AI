@@ -82,6 +82,7 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv' && !empty($search_re
 <head>
     <meta charset="UTF-8">
     <title>TubeInvestigation AI</title>
+    <link rel="icon" href="tubeinvestigation_ai.ico" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
 </head>
 

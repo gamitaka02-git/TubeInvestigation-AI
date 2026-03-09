@@ -66,6 +66,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'analyze_thumb') {
 <head>
     <meta charset="UTF-8">
     <title>動画概要分析 - TubeInvestigation AI</title>
+    <link rel="icon" href="tubeinvestigation_ai.ico" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
 </head>
 
