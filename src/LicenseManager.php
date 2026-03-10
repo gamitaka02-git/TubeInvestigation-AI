@@ -10,7 +10,7 @@ class LicenseManager
     /**
      * @var string ライセンス認証APIのエンドポイント（プレースホルダー）
      */
-    private string $apiUrl = 'https://gamitaka.com/api/check_license.php';
+    private string $apiUrl = 'https://gamitaka.com/tools/ti-ai/api/check_license.php';
 
     /**
      * マザーボードのUUIDを取得し、SHA-256でハッシュ化したHWIDを返す
@@ -70,6 +70,7 @@ class LicenseManager
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+            'action'      => 'activate',
             'license_key' => $licenseKey,
             'hwid'        => $hwid
         ]));
@@ -102,6 +103,56 @@ class LicenseManager
 
         // 認証失敗時
         $errorMessage = $result['message'] ?? '無効なライセンス、またはライセンスの期限が切れています。';
+        return ['success' => false, 'message' => $errorMessage];
+    }
+
+    /**
+     * APIサーバーと通信してこのPCのライセンス認証を解除する
+     *
+     * @param string $licenseKey ユーザーのライセンスキー
+     * @param string $hwid  ハッシュ化されたHWID
+     * @return array 解除結果配列 (['success' => bool, 'message' => string])
+     */
+    public function deauthorize(string $licenseKey, string $hwid): array
+    {
+        if (empty($licenseKey) || empty($hwid)) {
+            return ['success' => false, 'message' => 'ライセンスキーまたはHWIDが設定されていません。'];
+        }
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this->apiUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+            'action'      => 'deactivate',
+            'license_key' => $licenseKey,
+            'hwid'        => $hwid
+        ]));
+        // 商用利用向けの堅牢なセキュリティ設定（SSL証明書の検証を有効化）
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        // タイムアウト設定
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        
+        $response = curl_exec($ch);
+        $error = curl_error($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($response === false) {
+            return ['success' => false, 'message' => 'ライセンスサーバーに接続できませんでした（通信エラー）: ' . $error];
+        }
+
+        $result = json_decode($response, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return ['success' => false, 'message' => 'ライセンスサーバーからの不正な応答です。'];
+        }
+
+        if (isset($result['status']) && $result['status'] === 'success') {
+            return ['success' => true, 'message' => $result['message'] ?? '認証を解除しました。'];
+        }
+
+        $errorMessage = $result['message'] ?? '認証解除に失敗しました。';
         return ['success' => false, 'message' => $errorMessage];
     }
 }

@@ -41,6 +41,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_key'])) {
     exit;
 }
 
+// 認証解除処理
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deactivate_license'])) {
+    if ($license_key && $hwid) {
+        $deauthResult = $licenseManager->deauthorize($license_key, $hwid);
+        if ($deauthResult['success']) {
+            save_config($config_file, [
+                'license_key' => '', // 認証解除時はキーをクリア
+                'api_key' => $api_key,
+                'gemini_key' => $gemini_key
+            ]);
+            header('Location: ./?msg=deactivated');
+            exit;
+        } else {
+            $auth_error = $deauthResult['message'];
+            $_GET['edit_key'] = 1; // エラー表示のためモーダルを開く状態にする
+        }
+    }
+}
+
+// 更新確認APIエンドポイント (AJAX・手動用)
+if (isset($_GET['action']) && $_GET['action'] === 'check_update') {
+    header('Content-Type: application/json; charset=utf-8');
+    $res = check_for_updates(true, $config_file);
+    echo json_encode($res);
+    exit;
+}
+
+// 自動更新チェック (ページ読み込み時)
+$auto_update_info = check_for_updates(false, $config_file);
+
 $mode = $_GET['mode'] ?? 'keyword';
 $q = $_GET['q'] ?? '';
 $sort_by = $_GET['sort'] ?? 'score';
@@ -91,10 +121,23 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv' && !empty($search_re
         <?php if (!$is_licensed || !$api_key || !$gemini_key || isset($_GET['edit_key'])): ?>
             <div class="overlay">
                 <div class="modal">
-                    <h2>API & ライセンス設定</h2>
-                    <?php if ($auth_error && !isset($_GET['edit_key'])): ?>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h2 style="margin: 0;">API & ライセンス設定</h2>
+                        <?php if ($is_licensed): ?>
+                        <div style="text-align: right; flex-shrink: 0;">
+                            <span style="font-size: 0.75em; color: #666; display: block; margin-bottom: 4px;">現在のバージョン: <?php echo APP_VERSION; ?></span>
+                            <button type="button" id="btn-check-update" class="btn-save" style="background:#5c6bc0; padding:4px 10px; font-size:0.8em; border-radius:4px; margin: 0;">アップデートを確認する</button>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                    <?php if ($auth_error): ?>
                         <div style="color: #d32f2f; background: #ffebee; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-weight: bold;">
                             <?php echo htmlspecialchars($auth_error); ?>
+                        </div>
+                    <?php endif; ?>
+                    <?php if (isset($_GET['msg']) && $_GET['msg'] === 'deactivated'): ?>
+                        <div style="color: #2e7d32; background: #e8f5e9; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-weight: bold;">
+                            このPCの認証は正常に解除されました。
                         </div>
                     <?php endif; ?>
                     <div class="setup-guide">
@@ -124,15 +167,31 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv' && !empty($search_re
                                 value="<?php echo htmlspecialchars($gemini_key); ?>" placeholder="Gemini APIキーを入力" required>
                         </div>
 
-                        <button type="submit" name="save_key" class="btn-save">設定を保存して開始</button>
-                        <?php if (isset($_GET['edit_key'])): ?><a href="./" class="btn-cancel">キャンセル</a><?php endif; ?>
+                        <div style="text-align: center; margin-top: 20px;">
+                            <button type="submit" name="save_key" class="btn-save" style="margin-right: 10px;">設定を保存して開始</button>
+                            <?php if (isset($_GET['edit_key'])): ?><a href="./" class="btn-cancel">キャンセル</a><?php endif; ?>
+                        </div>
                     </form>
+                    
+                    <?php if ($is_licensed): ?>
+                        <hr class="modal-divider">
+                        <form method="POST" onsubmit="return confirm('本当にこのPCでの認証を解除しますか？\n（ライセンスキーの設定が初期化されます）');">
+                            <button type="submit" name="deactivate_license" class="btn-cancel" style="width:100%; margin-top:10px; background:#d32f2f; color:#fff; border:none; padding:10px; border-radius:4px; font-weight:bold; cursor:pointer;">このPCの認証を解除する</button>
+                        </form>
+                    <?php endif; ?>
                 </div>
             </div>
         <?php endif; ?>
 
+        <?php if ($auto_update_info && $auto_update_info['has_update']): ?>
+            <div id="update-banner" style="background: #e3f2fd; color: #0d47a1; padding: 10px; text-align: center; font-size: 0.9em; font-weight: bold; border-bottom: 1px solid #bbdefb;">
+                新しいバージョン（<?php echo htmlspecialchars($auto_update_info['latest_version']); ?>）が利用可能です。
+                <a href="#" onclick="openUpdateUrl('<?php echo $auto_update_info['url']; ?>'); return false;" style="color: #1565c0; text-decoration: underline; margin-left: 10px;">詳細を見る</a>
+            </div>
+        <?php endif; ?>
+
         <header class="header">
-            <h1>TubeInvestigation AI</h1><a href="?edit_key=1" class="btn-settings">キーを変更する</a>
+            <h1>TubeInvestigation AI</h1><a href="?edit_key=1" class="btn-settings">ツール設定</a>
         </header>
 
         <form method="GET" class="search-form">
@@ -232,10 +291,48 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv' && !empty($search_re
         <?php endif; ?>
 
         <footer class="footer">
-            <p>&copy; TubeInvestigation AI</p>
+            <p>&copy; TubeInvestigation AI (<?php echo APP_VERSION; ?>)</p>
         </footer>
     </div>
     <script src="script.js"></script>
+    <script>
+        // システムの標準ブラウザで開くための処理 (ローカル環境・Exe化対応)
+        function openUpdateUrl(url) {
+            window.open(url, '_blank');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const btnUpdate = document.getElementById('btn-check-update');
+            if (btnUpdate) {
+                btnUpdate.addEventListener('click', function() {
+                    const originalText = this.innerText;
+                    this.innerText = '確認中...';
+                    this.disabled = true;
+
+                    fetch('?action=check_update')
+                        .then(res => res.json())
+                        .then(data => {
+                            this.innerText = originalText;
+                            this.disabled = false;
+                            
+                            if (data && data.has_update) {
+                                if (confirm(`新しいバージョン（${data.latest_version}）があります。\nアップデートしますか？`)) {
+                                    openUpdateUrl(data.url);
+                                }
+                            } else {
+                                alert(`現在のバージョン（<?php echo APP_VERSION; ?>）は最新です。`);
+                            }
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            this.innerText = originalText;
+                            this.disabled = false;
+                            alert('アップデートの確認に失敗しました。ネットワーク接続を確認してください。');
+                        });
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

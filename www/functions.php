@@ -1,4 +1,6 @@
 <?php
+// 現在のアプリバージョン
+define('APP_VERSION', 'v1.0.0');
 $config_file = __DIR__ . '/../config.json';
 
 /**
@@ -21,6 +23,78 @@ function load_config($path)
 function save_config($path, $data)
 {
     file_put_contents($path, json_encode($data, JSON_PRETTY_PRINT));
+}
+
+/**
+ * GitHub API から最新のリリース情報を取得し、更新が必要か確認する
+ *
+ * @param bool $force trueの場合は前回のチェック時間を無視して強制チェック
+ * @param string $config_file config.jsonのパス
+ * @return array|false 更新がある場合は配列 ['has_update' => true, 'latest_version' => 'vX.X.X', 'url' => '...']、ない/エラー時は false を返す
+ */
+function check_for_updates($force = false, $config_file = null)
+{
+    $repo_owner = 'gamitaka02-git';
+    $repo_name  = 'TubeInvestigation-AI';
+    $api_url    = "https://api.github.com/repos/{$repo_owner}/{$repo_name}/releases/latest";
+    $cache_time = 7 * 24 * 60 * 60; // 7日間 (604,800秒)
+
+    $config = [];
+    if ($config_file && file_exists($config_file)) {
+        $config = json_decode(file_get_contents($config_file), true) ?: [];
+    }
+
+    $last_check = $config['last_update_check'] ?? 0;
+    $now = time();
+
+    // 手動(強制)ではなく、かつ7日経過していない場合はチェックをスキップ
+    if (!$force && ($now - $last_check) < $cache_time) {
+        return false;
+    }
+
+    // GitHub APIリクエスト
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $api_url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    // User-Agent はGitHub APIの必須要件
+    curl_setopt($ch, CURLOPT_USERAGENT, 'TubeInvestigation-AI');
+    curl_setopt($ch, CURLOPT_TIMEOUT, 5); // タイムアウトは短めに
+    $response = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    // API取得に成功した場合のみ最終チェック時刻を更新
+    if ($http_code === 200 && $response) {
+        if ($config_file) {
+            $config['last_update_check'] = $now;
+            save_config($config_file, $config);
+        }
+
+        $data = json_decode($response, true);
+        if (isset($data['tag_name'])) {
+            $latest_version = $data['tag_name'];
+            $release_url = $data['html_url'] ?? "https://github.com/{$repo_owner}/{$repo_name}/releases/latest";
+
+            // バージョン比較 (APP_VERSION と tag_name が異なる、または最新が新しい場合)
+            // v1.0.0 のような形式を想定し、version_compareを使用
+            $current_ver_num = ltrim(APP_VERSION, 'v');
+            $latest_ver_num  = ltrim($latest_version, 'v');
+
+            if (version_compare($current_ver_num, $latest_ver_num, '<')) {
+                return [
+                    'has_update' => true,
+                    'latest_version' => $latest_version,
+                    'url' => $release_url
+                ];
+            }
+        }
+    }
+
+    // 更新なし、またはAPIエラー
+    if ($force) {
+        return ['has_update' => false]; // 手動チェック時は「更新なし」を返すため
+    }
+    return false;
 }
 
 /**
