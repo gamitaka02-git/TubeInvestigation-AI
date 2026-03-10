@@ -1,6 +1,6 @@
 <?php
 // 現在のアプリバージョン
-define('APP_VERSION', 'v1.0.0');
+define('APP_VERSION', 'v1.0.1');
 $config_file = __DIR__ . '/../config.json';
 
 /**
@@ -73,7 +73,15 @@ function check_for_updates($force = false, $config_file = null)
         $data = json_decode($response, true);
         if (isset($data['tag_name'])) {
             $latest_version = $data['tag_name'];
-            $release_url = $data['html_url'] ?? "https://github.com/{$repo_owner}/{$repo_name}/releases/latest";
+            
+            // 優先順位 1. config.json の短縮URL, 2. GitHubのZipファイル(assets), 3. html_url
+            $download_url = $config['update_url'] ?? null;
+            if (!$download_url && !empty($data['assets']) && !empty($data['assets'][0]['browser_download_url'])) {
+                $download_url = $data['assets'][0]['browser_download_url'];
+            }
+            if (!$download_url) {
+                $download_url = $data['html_url'] ?? "https://github.com/{$repo_owner}/{$repo_name}/releases/latest";
+            }
 
             // バージョン比較 (APP_VERSION と tag_name が異なる、または最新が新しい場合)
             // v1.0.0 のような形式を想定し、version_compareを使用
@@ -84,7 +92,7 @@ function check_for_updates($force = false, $config_file = null)
                 return [
                     'has_update' => true,
                     'latest_version' => $latest_version,
-                    'url' => $release_url
+                    'url' => $download_url
                 ];
             }
         }

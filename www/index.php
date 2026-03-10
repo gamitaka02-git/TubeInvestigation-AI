@@ -186,7 +186,7 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv' && !empty($search_re
         <?php if ($auto_update_info && $auto_update_info['has_update']): ?>
             <div id="update-banner" style="background: #e3f2fd; color: #0d47a1; padding: 10px; text-align: center; font-size: 0.9em; font-weight: bold; border-bottom: 1px solid #bbdefb;">
                 新しいバージョン（<?php echo htmlspecialchars($auto_update_info['latest_version']); ?>）が利用可能です。
-                <a href="#" onclick="openUpdateUrl('<?php echo $auto_update_info['url']; ?>'); return false;" style="color: #1565c0; text-decoration: underline; margin-left: 10px;">詳細を見る</a>
+                <a href="#" onclick="openUpdateUrl('<?php echo $auto_update_info['url']; ?>'); return false;" style="color: #1565c0; text-decoration: underline; margin-left: 10px;">ダウンロードする</a>
             </div>
         <?php endif; ?>
 
@@ -316,7 +316,7 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv' && !empty($search_re
                             this.disabled = false;
                             
                             if (data && data.has_update) {
-                                if (confirm(`新しいバージョン（${data.latest_version}）があります。\nアップデートしますか？`)) {
+                                if (confirm(`新しいバージョン（${data.latest_version}）があります。\nアップデートファイルをダウンロードしますか？`)) {
                                     openUpdateUrl(data.url);
                                 }
                             } else {
