@@ -22,22 +22,40 @@ class LicenseManager
     {
         $output = [];
         $return_var = -1;
-        // Windowsのwmicコマンドを使用してマザーボードのUUIDを取得します
-        // 2>&1 で標準エラー出力も取得します
-        exec('wmic csproduct get uuid 2>&1', $output, $return_var);
-
-        if ($return_var !== 0 || empty($output)) {
-            throw new RuntimeException('マザーボードのUUIDを取得できませんでした。');
-        }
-
         $uuid = '';
-        foreach ($output as $line) {
-            $line = trim($line);
-            // ヘッダ行（'UUID'）をスキップして値を取得
-            if (!empty($line) && strtolower($line) !== 'uuid') {
-                $uuid = $line;
-                break;
+
+        if (PHP_OS_FAMILY === 'Windows') {
+            // Windowsのwmicコマンドを使用してマザーボードのUUIDを取得します
+            exec('wmic csproduct get uuid 2>&1', $output, $return_var);
+
+            if ($return_var !== 0 || empty($output)) {
+                throw new RuntimeException('マザーボードのUUIDを取得できませんでした。');
             }
+
+            foreach ($output as $line) {
+                $line = trim($line);
+                if (!empty($line) && strtolower($line) !== 'uuid') {
+                    $uuid = $line;
+                    break;
+                }
+            }
+        } elseif (PHP_OS_FAMILY === 'Darwin') {
+            // Macの場合はioregコマンドを使用してハードウェアUUIDを取得します
+            exec('ioreg -rd1 -c IOPlatformExpertDevice | grep IOPlatformUUID 2>&1', $output, $return_var);
+
+            if ($return_var !== 0 || empty($output)) {
+                throw new RuntimeException('MacのハードウェアUUIDを取得できませんでした。');
+            }
+
+            // 例: "IOPlatformUUID" = "00000000-0000-0000-0000-000000000000"
+            foreach ($output as $line) {
+                if (preg_match('/"IOPlatformUUID"\s*=\s*"([^"]+)"/', $line, $matches)) {
+                    $uuid = $matches[1];
+                    break;
+                }
+            }
+        } else {
+            throw new RuntimeException('サポートされていないOSです。');
         }
 
         if (empty($uuid)) {
@@ -70,16 +88,16 @@ class LicenseManager
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
-            'action'      => 'activate',
+            'action' => 'activate',
             'license_key' => $licenseKey,
-            'hwid'        => $hwid
+            'hwid' => $hwid
         ]));
         // 商用利用向けの堅牢なセキュリティ設定（SSL証明書の検証を有効化）
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
         // タイムアウト設定（ネットワーク未接続時等で長時間待機させないため）
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-        
+
         $response = curl_exec($ch);
         $error = curl_error($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -124,16 +142,16 @@ class LicenseManager
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
-            'action'      => 'deactivate',
+            'action' => 'deactivate',
             'license_key' => $licenseKey,
-            'hwid'        => $hwid
+            'hwid' => $hwid
         ]));
         // 商用利用向けの堅牢なセキュリティ設定（SSL証明書の検証を有効化）
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
         // タイムアウト設定
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-        
+
         $response = curl_exec($ch);
         $error = curl_error($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);

@@ -6,6 +6,9 @@ config.json
 /docs/
 /LP/
 /.vscode/
+/php/
+/php-mac/
+
 
 # PHPの依存関係や一時ファイル
 /php/extras/ssl/openssl.cnf
@@ -14,3 +17,23 @@ config.json
 
 # ビルド済みファイル
 .exe
+*.app
+*.app.zip
+
+# Mac/Apple specific files
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk

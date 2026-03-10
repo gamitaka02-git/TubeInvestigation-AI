@@ -1,7 +1,15 @@
 <?php
 // 現在のアプリバージョン
 define('APP_VERSION', 'v1.0.1');
-$config_file = __DIR__ . '/../config.json';
+
+// 設定ファイルのパス
+if (PHP_OS_FAMILY === 'Darwin' && strpos(__DIR__, '.app/Contents/Resources') !== false) {
+    // .appの中から実行されている場合、計4つ上のディレクトリ（.appの隣）にあるconfig.jsonを参照する
+    $config_file = __DIR__ . '/../../../../config.json';
+} else {
+    // Windows、またはMacでの開発用実行（.app外）の場合は1つ上のディレクトリを参照
+    $config_file = __DIR__ . '/../config.json';
+}
 
 /**
  * 設定の読み込み
@@ -35,8 +43,8 @@ function save_config($path, $data)
 function check_for_updates($force = false, $config_file = null)
 {
     $repo_owner = 'gamitaka02-git';
-    $repo_name  = 'TubeInvestigation-AI';
-    $api_url    = "https://api.github.com/repos/{$repo_owner}/{$repo_name}/releases/latest";
+    $repo_name = 'TubeInvestigation-AI';
+    $api_url = "https://api.github.com/repos/{$repo_owner}/{$repo_name}/releases/latest";
     $cache_time = 7 * 24 * 60 * 60; // 7日間 (604,800秒)
 
     $config = [];
@@ -73,7 +81,7 @@ function check_for_updates($force = false, $config_file = null)
         $data = json_decode($response, true);
         if (isset($data['tag_name'])) {
             $latest_version = $data['tag_name'];
-            
+
             // 優先順位 1. config.json の短縮URL, 2. GitHubのZipファイル(assets), 3. html_url
             $download_url = $config['update_url'] ?? null;
             if (!$download_url && !empty($data['assets']) && !empty($data['assets'][0]['browser_download_url'])) {
@@ -86,7 +94,7 @@ function check_for_updates($force = false, $config_file = null)
             // バージョン比較 (APP_VERSION と tag_name が異なる、または最新が新しい場合)
             // v1.0.0 のような形式を想定し、version_compareを使用
             $current_ver_num = ltrim(APP_VERSION, 'v');
-            $latest_ver_num  = ltrim($latest_version, 'v');
+            $latest_ver_num = ltrim($latest_version, 'v');
 
             if (version_compare($current_ver_num, $latest_ver_num, '<')) {
                 return [
@@ -111,7 +119,8 @@ function check_for_updates($force = false, $config_file = null)
 function resolve_channel_id($input, $api_key)
 {
     $input = trim($input);
-    if (strpos($input, 'UC') === 0 && strlen($input) === 24) return $input;
+    if (strpos($input, 'UC') === 0 && strlen($input) === 24)
+        return $input;
     $id_param = "";
     if (strpos($input, '@') !== false) {
         $parts = explode('@', $input);
@@ -156,16 +165,18 @@ function fetch_youtube_data($q, $api_key, $mode = 'keyword', $min_subs = 0, $min
                 $all_items = array_merge($all_items, $res['items']);
                 $next_page_token = $res['nextPageToken'] ?? null;
             }
-            if (!$next_page_token) break;
+            if (!$next_page_token)
+                break;
         }
     } else {
         if ($mode === 'channel') {
             $channel_id = resolve_channel_id($q, $api_key);
-            if (!$channel_id) return ['items' => []];
+            if (!$channel_id)
+                return ['items' => []];
             $c_url = "https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&id={$channel_id}&key={$api_key}";
             $c_res = json_decode(@file_get_contents($c_url), true);
             if (!empty($c_res['items'][0])) {
-                $channel_meta = ['title' => $c_res['items'][0]['snippet']['title'], 'subs' => (int)($c_res['items'][0]['statistics']['subscriberCount'] ?? 0)];
+                $channel_meta = ['title' => $c_res['items'][0]['snippet']['title'], 'subs' => (int) ($c_res['items'][0]['statistics']['subscriberCount'] ?? 0)];
             }
         }
         $q_encoded = urlencode($q);
@@ -179,11 +190,13 @@ function fetch_youtube_data($q, $api_key, $mode = 'keyword', $min_subs = 0, $min
                 $all_items = array_merge($all_items, $res['items']);
                 $next_page_token = $res['nextPageToken'] ?? null;
             }
-            if (!$next_page_token) break;
+            if (!$next_page_token)
+                break;
         }
     }
 
-    if (!$all_items) return ['items' => []];
+    if (!$all_items)
+        return ['items' => []];
 
     if ($mode !== 'trending') {
         $video_ids = array_column(array_column($all_items, 'id'), 'videoId');
@@ -212,20 +225,23 @@ function fetch_youtube_data($q, $api_key, $mode = 'keyword', $min_subs = 0, $min
 
         $subs = $channel_stats[$c_id] ?? 0;
 
-        if ($subs < $min_subs) continue;
-        if ($min_dur > 0 && $duration < ($min_dur * 60)) continue;
-        if ($max_dur > 0 && $duration > ($max_dur * 60)) continue;
+        if ($subs < $min_subs)
+            continue;
+        if ($min_dur > 0 && $duration < ($min_dur * 60))
+            continue;
+        if ($max_dur > 0 && $duration > ($max_dur * 60))
+            continue;
 
         $results[] = [
             'title' => $item['snippet']['title'],
             'thumb' => $item['snippet']['thumbnails']['medium']['url'],
             'video_id' => $v_id,
             'channel_title' => $item['snippet']['channelTitle'],
-            'views' => (int)$views,
-            'likes' => (int)$likes,
-            'comments' => (int)$comments,
+            'views' => (int) $views,
+            'likes' => (int) $likes,
+            'comments' => (int) $comments,
             'duration' => $duration,
-            'subs' => (int)$subs,
+            'subs' => (int) $subs,
             'score' => ($subs > 0) ? round($views / $subs, 2) : 0,
             'published' => $item['snippet']['publishedAt']
         ];
@@ -260,7 +276,8 @@ function get_channel_stats($ids, $key)
         $url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=" . implode(',', $chunk) . "&key=$key";
         $data = json_decode(@file_get_contents($url), true);
         if (!empty($data['items'])) {
-            foreach ($data['items'] as $c) $stats[$c['id']] = $c['statistics']['subscriberCount'] ?? 0;
+            foreach ($data['items'] as $c)
+                $stats[$c['id']] = $c['statistics']['subscriberCount'] ?? 0;
         }
     }
     return $stats;
@@ -271,17 +288,24 @@ function get_channel_stats($ids, $key)
  */
 function get_relative_time($datetime)
 {
-    if (!$datetime) return '';
+    if (!$datetime)
+        return '';
     $now = new DateTime();
     $target = new DateTime($datetime);
     $diff = $now->diff($target);
 
-    if ($diff->y > 0) return $diff->y . '年前';
-    if ($diff->m > 0) return $diff->m . 'ヶ月前';
-    if ($diff->d >= 7) return floor($diff->d / 7) . '週間前';
-    if ($diff->d > 0) return $diff->d . '日前';
-    if ($diff->h > 0) return $diff->h . '時間前';
-    if ($diff->i > 0) return $diff->i . '分前';
+    if ($diff->y > 0)
+        return $diff->y . '年前';
+    if ($diff->m > 0)
+        return $diff->m . 'ヶ月前';
+    if ($diff->d >= 7)
+        return floor($diff->d / 7) . '週間前';
+    if ($diff->d > 0)
+        return $diff->d . '日前';
+    if ($diff->h > 0)
+        return $diff->h . '時間前';
+    if ($diff->i > 0)
+        return $diff->i . '分前';
     return '数秒前';
 }
 
