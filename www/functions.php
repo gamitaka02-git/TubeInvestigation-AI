@@ -1,13 +1,13 @@
 <?php
 // 現在のアプリバージョン
-define('APP_VERSION', 'v1.0.2');
+define('APP_VERSION', 'v1.0.3');
 
 // 共通のディレクトリ取得関数（Macの各種パス設定で使用）
 function get_config_dir() {
     if (PHP_OS_FAMILY === 'Darwin') {
-        $home = getenv('HOME');
-        $dir = $home . '/Library/Application Support/TubeInvestigationAI';
-        if (!file_exists($dir)) {
+        $home = getenv('HOME') ?: ($_SERVER['HOME'] ?? '');
+        $dir = ($home ?: '') . '/Library/Application Support/TubeInvestigationAI';
+        if ($home && !file_exists($dir)) {
             mkdir($dir, 0755, true);
         }
         return $dir;

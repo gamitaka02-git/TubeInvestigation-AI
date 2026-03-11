@@ -22,9 +22,12 @@ function parse_gemini_response($response)
             case 403:
                 $msg = "アクセス拒否: APIキーの権限を確認してください。";
                 break;
+            case 404:
+                $msg = "モデル未検出: 指定されたAIモデルが見つかりません。最新の安定モデルに切り替えます。";
+                break;
             case 500:
             case 503:
-                $msg = "サーバーエラー: Gemini API側で問題が発生しています。しばらく待ってから再試行してください。";
+                $msg = "サーバーエラー: Gemini API側で一時的な問題が発生しています。数分待ってから再試行してください。";
                 break;
             default:
                 $msg = "エラーコード {$code}: " . htmlspecialchars($result['error']['message'] ?? '不明なエラー');
@@ -52,7 +55,7 @@ function update_token_usage($usage_data)
 {
     // configディレクトリが取得できる場合はそこ、そうでなければ現在のディレクトリの1つ上に保存
     $dir = function_exists('get_config_dir') ? get_config_dir() : null;
-    $log_file = ($dir ? $dir : __DIR__ . '/..') . '/token_usage.json';
+    $log_file = ($dir ?: __DIR__ . '/..') . '/token_usage.json';
     $current = [];
     
     if (file_exists($log_file)) {
@@ -83,16 +86,39 @@ function update_token_usage($usage_data)
 }
 
 /**
+ * CURLを使用してGemini APIにポストする
+ */
+function post_to_gemini($api_key, $model, $data)
+{
+    $endpoint = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key=" . $api_key;
+    
+    $ch = curl_init($endpoint);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+
+    $response = curl_exec($ch);
+    $error = curl_error($ch);
+    curl_close($ch);
+
+    if ($response === false) {
+        return false;
+    }
+    return $response;
+}
+
+/**
  * Gemini APIを使用してYouTube動画と自分の画像を比較分析する
  */
 function analyze_video_summary($api_key, $video_title, $video_description)
 {
-    // タイムアウト対策
     set_time_limit(120);
     
-    // 2026年の最新安定モデル
-    $model = "gemini-3-flash-preview";
-    $endpoint = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key=" . $api_key;
+    // 現在最も安定している最新の軽量モデルを使用
+    $model = "gemini-flash-lite-latest";
 
     $prompt = "あなたはYouTube専門のコンサルタントです。
 以下の動画タイトルと説明文から、この動画の内容を分析してください。
@@ -119,26 +145,10 @@ function analyze_video_summary($api_key, $video_title, $video_description)
 
 5. <h3>想定されるキーワード</h3>
    - この動画タイトルから想定されるYouTube SEOに効果的なキーワードを3パターン解説付きで表示してください。";
-    $parts = [
-        ["text" => $prompt]
-    ];
-
-    $data = ["contents" => [["parts" => $parts]]];
-
-    $options = [
-        'http' => [
-            'method' => 'POST',
-            'header' => "Content-Type: application/json\r\n",
-            'content' => json_encode($data),
-            'ignore_errors' => true
-        ]
-    ];
-
-    $context = stream_context_create($options);
-    $response = @file_get_contents($endpoint, false, $context);
-    $parsed = parse_gemini_response($response);
     
-
+    $data = ["contents" => [["parts" => [["text" => $prompt]]]]];
+    $response = post_to_gemini($api_key, $model, $data);
+    $parsed = parse_gemini_response($response);
     
     return $parsed['msg'];
 }
@@ -148,14 +158,17 @@ function analyze_video_summary($api_key, $video_title, $video_description)
  */
 function analyze_thumbnail($api_key, $thumbnail_url, $video_title)
 {
-    // タイムアウト対策
     set_time_limit(120);
 
-    $model = "gemini-3-flash-preview";
-    $endpoint = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key=" . $api_key;
+    $model = "gemini-flash-lite-latest";
 
-    // サムネイル画像を取得してbase64エンコード
-    $image_data = @file_get_contents($thumbnail_url);
+    // サムネイル画像を取得
+    $ch_img = curl_init($thumbnail_url);
+    curl_setopt($ch_img, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch_img, CURLOPT_SSL_VERIFYPEER, false);
+    $image_data = curl_exec($ch_img);
+    curl_close($ch_img);
+
     if (!$image_data) {
         return "<p>サムネイル画像の取得に失敗しました。</p>";
     }
@@ -183,32 +196,13 @@ function analyze_thumbnail($api_key, $thumbnail_url, $video_title)
 5. <h3>より効果的なサムネイルにするための提案</h3>
    - さらにクリック率を向上させるためのアドバイスを具体的に2〜3点挙げてください。";
 
-    $parts = [
+    $data = ["contents" => [["parts" => [
         ["text" => $prompt],
-        [
-            "inline_data" => [
-                "mime_type" => "image/jpeg",
-                "data" => $base64_image
-            ]
-        ]
-    ];
+        ["inline_data" => ["mime_type" => "image/jpeg", "data" => $base64_image]]
+    ]]]];
 
-    $data = ["contents" => [["parts" => $parts]]];
-
-    $options = [
-        'http' => [
-            'method' => 'POST',
-            'header' => "Content-Type: application/json\r\n",
-            'content' => json_encode($data),
-            'ignore_errors' => true
-        ]
-    ];
-
-    $context = stream_context_create($options);
-    $response = @file_get_contents($endpoint, false, $context);
+    $response = post_to_gemini($api_key, $model, $data);
     $parsed = parse_gemini_response($response);
-    
-
     
     return $parsed['msg'];
 }
