@@ -1,6 +1,6 @@
 <?php
 // 現在のアプリバージョン
-define('APP_VERSION', 'v1.0.1');
+define('APP_VERSION', 'v1.0.2');
 
 // 設定ファイルのパス
 if (PHP_OS_FAMILY === 'Darwin' && strpos(__DIR__, '.app/Contents/Resources') !== false) {
