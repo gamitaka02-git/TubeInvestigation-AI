@@ -439,11 +439,22 @@ button,
     flex: 1;
 }
 
-.video-details h2 {
+.video-details h2.analysis-video-title {
     margin-top: 0;
-    font-size: 18px;
+    font-size: 20px;
     line-height: 1.4;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
+}
+
+.analysis-channel-info {
+    font-size: 14px;
+    color: #444;
+    margin-bottom: 12px;
+}
+
+.analysis-subs-count {
+    margin-left: 10px;
+    font-weight: normal;
 }
 
 .video-stats-bar {

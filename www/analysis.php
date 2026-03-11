@@ -38,6 +38,14 @@ $views = (int)($video_data['statistics']['viewCount'] ?? 0);
 $likes = (int)($video_data['statistics']['likeCount'] ?? 0);
 $comments = (int)($video_data['statistics']['commentCount'] ?? 0);
 
+// チャンネル詳細（登録者数）取得
+$channel_id = $video_data['snippet']['channelId'] ?? '';
+$channel_subs = 0;
+if ($channel_id && $yt_key) {
+    $channel_stats = get_channel_stats([$channel_id], $yt_key);
+    $channel_subs = (int)($channel_stats[$channel_id] ?? 0);
+}
+
 // AJAXリクエスト処理 (AI分析実行)
 if (isset($_GET['action']) && $_GET['action'] === 'analyze_ai') {
     if ($gemini_key) {
@@ -65,7 +73,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'analyze_thumb') {
 
 <head>
     <meta charset="UTF-8">
-    <title>動画概要分析 - TubeInvestigation AI</title>
+    <title>AI動画分析 - TubeInvestigation AI</title>
     <link rel="icon" href="tubeinvestigation_ai.ico" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -73,7 +81,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'analyze_thumb') {
 <body>
     <div class="container">
         <header class="header">
-            <h1>📝 AI動画概要分析</h1>
+            <h1>📝 AI動画分析</h1>
             <div class="header-actions">
                 <button class="btn-export btn-export-pdf hidden" id="btn-pdf-header">📄 PDF保存</button>
                 <button class="btn-export btn-export-md hidden" id="btn-md-header">📝 Markdown保存</button>
@@ -89,7 +97,11 @@ if (isset($_GET['action']) && $_GET['action'] === 'analyze_thumb') {
                 <a href="https://www.youtube.com/watch?v=<?php echo htmlspecialchars($video_id); ?>" target="_blank" class="btn-watch">▶ YouTubeで動画を見る</a>
             </div>
             <div class="video-details">
-                <h2><?php echo htmlspecialchars($title); ?> | <?php echo htmlspecialchars($channelTitle); ?></h2>
+                <h2 class="analysis-video-title"><?php echo htmlspecialchars($title); ?></h2>
+                <div class="analysis-channel-info">
+                    ｜<?php echo htmlspecialchars($channelTitle); ?> 
+                    <span class="analysis-subs-count">登録者数 <?php echo number_format($channel_subs); ?>人</span>
+                </div>
                 <div class="video-stats-bar">
                     <span class="stat-badge stat-views">👁 再生数: <?php echo number_format($views); ?></span>
                     <span class="stat-badge stat-likes">👍 高評価: <?php echo number_format($likes); ?></span>
