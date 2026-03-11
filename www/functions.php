@@ -2,12 +2,39 @@
 // 現在のアプリバージョン
 define('APP_VERSION', 'v1.0.2');
 
+// 共通のディレクトリ取得関数（Macの各種パス設定で使用）
+function get_config_dir() {
+    if (PHP_OS_FAMILY === 'Darwin') {
+        $home = getenv('HOME');
+        $dir = $home . '/Library/Application Support/TubeInvestigationAI';
+        if (!file_exists($dir)) {
+            mkdir($dir, 0755, true);
+        }
+        return $dir;
+    }
+    return null;
+}
+
 // 設定ファイルのパス
-if (PHP_OS_FAMILY === 'Darwin' && strpos(__DIR__, '.app/Contents/Resources') !== false) {
-    // .appの中から実行されている場合、計4つ上のディレクトリ（.appの隣）にあるconfig.jsonを参照する
-    $config_file = __DIR__ . '/../../../../config.json';
+if (PHP_OS_FAMILY === 'Darwin' && (strpos(__DIR__, '.app/Contents/Resources') !== false || strpos(__DIR__, 'tubeinvestigation-ai/www') !== false)) {
+    // Macの.app内実行または開発環境時は Application Support を使用
+    $config_dir = get_config_dir();
+    $config_file = $config_dir . '/config.json';
+    
+    // 旧パス（.appの隣、または開発環境の1つ上）にファイルがある場合は移行を試みる
+    // ただし、毎回デスクトップをチェックしてTCC警告が出るのを避けるため、
+    // すでに新しい場所にファイルがある場合は何もしない
+    if (!file_exists($config_file)) {
+        $old_config_file = (strpos(__DIR__, '.app/Contents/Resources') !== false) 
+            ? __DIR__ . '/../../../../config.json'
+            : __DIR__ . '/../config.json';
+            
+        if (@file_exists($old_config_file)) {
+            @copy($old_config_file, $config_file);
+        }
+    }
 } else {
-    // Windows、またはMacでの開発用実行（.app外）の場合は1つ上のディレクトリを参照
+    // Windows、またはその他の環境
     $config_file = __DIR__ . '/../config.json';
 }
 

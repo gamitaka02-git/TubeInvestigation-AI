@@ -50,7 +50,9 @@ function parse_gemini_response($response)
  */
 function update_token_usage($usage_data)
 {
-    $log_file = __DIR__ . '/../token_usage.json';
+    // configディレクトリが取得できる場合はそこ、そうでなければ現在のディレクトリの1つ上に保存
+    $dir = function_exists('get_config_dir') ? get_config_dir() : null;
+    $log_file = ($dir ? $dir : __DIR__ . '/..') . '/token_usage.json';
     $current = [];
     
     if (file_exists($log_file)) {
