@@ -157,12 +157,25 @@ body {
     border-radius: 6px;
 }
 
-.filter-group input[type="number"] {
-    width: 50px;
+.filter-group input[type="number"],
+.filter-group select {
     padding: 6px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 13px;
+    background-color: #fff;
+}
+
+.filter-group input[type="number"] {
+    width: 50px;
+}
+
+.filter-group.tarm {
+    width: 170px;
+}
+
+.filter-group.tarm select {
+    width: 130px;
 }
 
 .filter-group.time {

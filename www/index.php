@@ -78,12 +78,13 @@ $min_subs = isset($_GET['min_subs']) ? (int) $_GET['min_subs'] : 0;
 $min_dur = isset($_GET['min_dur']) ? (int) $_GET['min_dur'] : 0;
 $max_dur = isset($_GET['max_dur']) ? (int) $_GET['max_dur'] : 0;
 $region = $_GET['region'] ?? 'JP';
+$published_after = $_GET['published_after'] ?? 'all';
 
 $regions = ['JP' => '🇯🇵 日本', 'US' => '🇺🇸 アメリカ', 'KR' => '🇰🇷 韓国', 'GB' => '🇬🇧 イギリス', 'BR' => '🇧🇷 ブラジル', 'IN' => '🇮🇳 インド'];
 
 $search_results = [];
 if ($api_key && ($mode === 'trending' || $q !== '')) {
-    $data = fetch_youtube_data($q, $api_key, $mode, $min_subs, $min_dur, $max_dur, $region);
+    $data = fetch_youtube_data($q, $api_key, $mode, $min_subs, $min_dur, $max_dur, $region, $published_after);
     $search_results = $data['items'] ?? [];
     $channel_meta = $data['channel_meta'] ?? null;
     usort($search_results, function ($a, $b) use ($sort_by) {
@@ -204,6 +205,16 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv' && !empty($search_re
                             <option value="<?php echo $code; ?>" <?php echo $region === $code ? 'selected' : ''; ?>>
                                 <?php echo $name; ?></option><?php endforeach; ?>
                     </select></div>
+                <div class="filter-group tarm"><span>期間:</span><select name="published_after">
+                        <option value="all" <?php echo $published_after === 'all' ? 'selected' : ''; ?>>全期間</option>
+                        <option value="1d" <?php echo $published_after === '1d' ? 'selected' : ''; ?>>昨日（24時間以内）</option>
+                        <option value="3d" <?php echo $published_after === '3d' ? 'selected' : ''; ?>>3日以内</option>
+                        <option value="7d" <?php echo $published_after === '7d' ? 'selected' : ''; ?>>7日以内</option>
+                        <option value="30d" <?php echo $published_after === '30d' ? 'selected' : ''; ?>>30日以内</option>
+                        <option value="90d" <?php echo $published_after === '90d' ? 'selected' : ''; ?>>3ヶ月以内</option>
+                        <option value="180d" <?php echo $published_after === '180d' ? 'selected' : ''; ?>>6ヶ月以内</option>
+                        <option value="365d" <?php echo $published_after === '365d' ? 'selected' : ''; ?>>1年以内</option>
+                    </select></div>
                 <div class="filter-group"><span>最低登録者:</span><input type="number" name="min_subs"
                         value="<?php echo $min_subs; ?>" min="0"></div>
                 <div class="filter-group time"><span>分:</span><input type="number" name="min_dur"
@@ -227,7 +238,7 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv' && !empty($search_re
             <div class="sort-container">
                 <div>
                     <span>並び替え：</span>
-                    <?php $url_params = "q=" . urlencode($q) . "&mode=$mode&min_subs=$min_subs&min_dur=$min_dur&max_dur=$max_dur&region=$region"; ?>
+                    <?php $url_params = "q=" . urlencode($q) . "&mode=$mode&min_subs=$min_subs&min_dur=$min_dur&max_dur=$max_dur&region=$region&published_after=$published_after"; ?>
                     <a href="?<?php echo $url_params; ?>&sort=score"
                         class="btn-sort <?php echo $sort_by == 'score' ? 'active' : ''; ?>">🔥 バズり度</a>
                     <a href="?<?php echo $url_params; ?>&sort=views"

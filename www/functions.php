@@ -177,11 +177,30 @@ function iso8601_to_seconds($iso_duration)
 /**
  * YouTubeデータの取得
  */
-function fetch_youtube_data($q, $api_key, $mode = 'keyword', $min_subs = 0, $min_dur = 0, $max_dur = 0, $region_code = 'JP')
+function fetch_youtube_data($q, $api_key, $mode = 'keyword', $min_subs = 0, $min_dur = 0, $max_dur = 0, $region_code = 'JP', $published_after = '')
 {
     $all_items = [];
     $next_page_token = '';
     $channel_meta = null;
+
+    // 期間指定（publishedAfter）のパラメータ生成
+    $published_after_param = '';
+    if ($published_after && $published_after !== 'all') {
+        $days = 0;
+        switch ($published_after) {
+            case '1d': $days = 1; break;
+            case '3d': $days = 3; break;
+            case '7d': $days = 7; break;
+            case '30d': $days = 30; break;
+            case '90d': $days = 90; break;
+            case '180d': $days = 180; break;
+            case '365d': $days = 365; break;
+        }
+        if ($days > 0) {
+            $rfc3339_date = date(DATE_RFC3339, strtotime("-{$days} days"));
+            $published_after_param = "&publishedAfter=" . urlencode($rfc3339_date);
+        }
+    }
 
     if ($mode === 'trending') {
         for ($i = 0; $i < 2; $i++) {
@@ -210,8 +229,8 @@ function fetch_youtube_data($q, $api_key, $mode = 'keyword', $min_subs = 0, $min
         for ($i = 0; $i < 2; $i++) {
             $token_param = $next_page_token ? "&pageToken={$next_page_token}" : "";
             $url = ($mode === 'channel')
-                ? "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId={$channel_id}&type=video&maxResults=50&order=date&key={$api_key}{$token_param}"
-                : "https://www.googleapis.com/youtube/v3/search?part=snippet&q={$q_encoded}&type=video&maxResults=50&key={$api_key}{$token_param}";
+                ? "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId={$channel_id}&type=video&maxResults=50&order=date&key={$api_key}{$token_param}{$published_after_param}"
+                : "https://www.googleapis.com/youtube/v3/search?part=snippet&q={$q_encoded}&type=video&maxResults=50&key={$api_key}{$token_param}{$published_after_param}";
             $res = json_decode(@file_get_contents($url), true);
             if (!empty($res['items'])) {
                 $all_items = array_merge($all_items, $res['items']);
