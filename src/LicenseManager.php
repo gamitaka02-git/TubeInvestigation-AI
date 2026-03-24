@@ -10,7 +10,7 @@ class LicenseManager
     /**
      * @var string ライセンス認証APIのエンドポイント（プレースホルダー）
      */
-    private string $apiUrl = 'https://gamitaka.com/tools/ti-ai/api/check_license.php';
+    private string $apiUrl = 'https://gamitaka.com/tools/tubeinvestigation_ai/api/check_license.php';
 
     /**
      * マザーボードのUUIDを取得し、SHA-256でハッシュ化したHWIDを返す
