@@ -113,12 +113,15 @@ function post_to_gemini($api_key, $model, $data)
 /**
  * Gemini APIを使用してYouTube動画と自分の画像を比較分析する
  */
-function analyze_video_summary($api_key, $video_title, $video_description)
+function analyze_video_summary($api_key, $video_title, $video_description, $model = 'gemini-3.1-flash-lite-preview')
 {
     set_time_limit(120);
     
-    // 現在最も安定している最新の軽量モデルを使用
-    $model = "gemini-flash-lite-latest";
+    // 許可されたモデルリスト
+    $allowed_models = ['gemini-3.1-flash-lite-preview', 'gemini-3-flash-preview', 'gemini-2.5-flash', 'gemini-2.5-flash-lite'];
+    if (!in_array($model, $allowed_models)) {
+        $model = 'gemini-3.1-flash-lite-preview';
+    }
 
     $prompt = "あなたはYouTube専門のコンサルタントです。
 以下の動画タイトルと説明文から、この動画の内容を分析してください。
@@ -156,11 +159,15 @@ function analyze_video_summary($api_key, $video_title, $video_description)
 /**
  * Gemini APIを使用してサムネイル画像を分析する
  */
-function analyze_thumbnail($api_key, $thumbnail_url, $video_title)
+function analyze_thumbnail($api_key, $thumbnail_url, $video_title, $model = 'gemini-3.1-flash-lite-preview')
 {
     set_time_limit(120);
 
-    $model = "gemini-flash-lite-latest";
+    // 許可されたモデルリスト
+    $allowed_models = ['gemini-3.1-flash-lite-preview', 'gemini-3-flash-preview', 'gemini-2.5-flash', 'gemini-2.5-flash-lite'];
+    if (!in_array($model, $allowed_models)) {
+        $model = 'gemini-3.1-flash-lite-preview';
+    }
 
     // サムネイル画像を取得
     $ch_img = curl_init($thumbnail_url);

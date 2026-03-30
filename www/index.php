@@ -6,6 +6,7 @@ $config = load_config($config_file);
 $license_key = $config['license_key'] ?? '';
 $api_key = $config['api_key'] ?? '';
 $gemini_key = $config['gemini_key'] ?? ''; // Geminiキーを読み込み
+$gemini_model = $config['gemini_model'] ?? 'gemini-3.1-flash-lite-preview';
 
 $licenseManager = new LicenseManager();
 $hwid = '';
@@ -35,7 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_key'])) {
     save_config($config_file, [
         'license_key' => trim($_POST['license_key']),
         'api_key' => trim($_POST['api_key']),
-        'gemini_key' => trim($_POST['gemini_key']) // Geminiキーも保存
+        'gemini_key' => trim($_POST['gemini_key']),
+        'gemini_model' => $_POST['gemini_model'] ?? 'gemini-3.1-flash-lite-preview'
     ]);
     header('Location: ./');
     exit;
@@ -49,7 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deactivate_license'])
             save_config($config_file, [
                 'license_key' => '', // 認証解除時はキーをクリア
                 'api_key' => $api_key,
-                'gemini_key' => $gemini_key
+                'gemini_key' => $gemini_key,
+                'gemini_model' => $gemini_model
             ]);
             header('Location: ./?msg=deactivated');
             exit;
@@ -166,6 +169,24 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv' && !empty($search_re
                         <div class="api-input">
                             <label>Gemini API Key</label><input type="password" name="gemini_key"
                                 value="<?php echo htmlspecialchars($gemini_key); ?>" placeholder="Gemini APIキーを入力" required>
+                        </div>
+
+                        <div class="api-input">
+                            <label>🧠 AIモデル</label>
+                            <select name="gemini_model" class="gemini-model-select">
+                                <?php
+                                $models = [
+                                    'gemini-3.1-flash-lite-preview' => 'Gemini 3.1 Flash Lite (Preview)',
+                                    'gemini-3-flash-preview' => 'Gemini 3 Flash (Preview)',
+                                    'gemini-2.5-flash' => 'Gemini 2.5 Flash',
+                                    'gemini-2.5-flash-lite' => 'Gemini 2.5 Flash Lite',
+                                ];
+                                foreach ($models as $value => $label): ?>
+                                    <option value="<?php echo $value; ?>" <?php echo $gemini_model === $value ? 'selected' : ''; ?>>
+                                        <?php echo $label; ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
 
                         <div style="text-align: center; margin-top: 20px;">

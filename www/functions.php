@@ -1,6 +1,6 @@
 <?php
 // 現在のアプリバージョン
-define('APP_VERSION', 'v1.0.3');
+define('APP_VERSION', 'v1.0.5');
 
 // 共通のディレクトリ取得関数（Macの各種パス設定で使用）
 function get_config_dir() {
@@ -43,7 +43,7 @@ if (PHP_OS_FAMILY === 'Darwin' && (strpos(__DIR__, '.app/Contents/Resources') !=
  */
 function load_config($path)
 {
-    $defaults = ['license_key' => '', 'api_key' => '', 'gemini_key' => ''];
+    $defaults = ['license_key' => '', 'api_key' => '', 'gemini_key' => '', 'gemini_model' => 'gemini-3.1-flash-lite-preview'];
     if (!file_exists($path)) {
         save_config($path, $defaults);
         return $defaults;

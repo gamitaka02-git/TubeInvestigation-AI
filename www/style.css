@@ -534,6 +534,25 @@ button,
     gap: 10px;
 }
 
+/* 設定モーダル内のAIモデル選択 */
+.gemini-model-select {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 13px;
+    background: #fff;
+    color: #333;
+    cursor: pointer;
+    width: 100%;
+    max-width: 200px;
+}
+
+.gemini-model-select:focus {
+    outline: none;
+    border-color: #8e24aa;
+    box-shadow: 0 0 0 2px rgba(142, 36, 170, 0.15);
+}
+
 /* AI出力コンテンツの整形 */
 .ai-content {
     line-height: 1.8;

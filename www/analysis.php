@@ -7,6 +7,7 @@ $config = load_config($config_file);
 $license_key = $config['license_key'] ?? '';
 $yt_key = $config['api_key'] ?? '';
 $gemini_key = $config['gemini_key'] ?? '';
+$gemini_model = $config['gemini_model'] ?? 'gemini-3.1-flash-lite-preview';
 
 $licenseManager = new LicenseManager();
 $hwid = '';
@@ -49,7 +50,7 @@ if ($channel_id && $yt_key) {
 // AJAXリクエスト処理 (AI分析実行)
 if (isset($_GET['action']) && $_GET['action'] === 'analyze_ai') {
     if ($gemini_key) {
-        $analysis_result = analyze_video_summary($gemini_key, $title, $description);
+        $analysis_result = analyze_video_summary($gemini_key, $title, $description, $gemini_model);
         echo $analysis_result;
     } else {
         echo "<p>Gemini APIキーが設定されていません。</p>";
@@ -60,7 +61,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'analyze_ai') {
 // AJAXリクエスト処理 (サムネイル分析実行)
 if (isset($_GET['action']) && $_GET['action'] === 'analyze_thumb') {
     if ($gemini_key) {
-        $thumb_result = analyze_thumbnail($gemini_key, $yt_thumb, $title);
+        $thumb_result = analyze_thumbnail($gemini_key, $yt_thumb, $title, $gemini_model);
         echo $thumb_result;
     } else {
         echo "<p>Gemini APIキーが設定されていません。</p>";
