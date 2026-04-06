@@ -8,7 +8,7 @@ config.json
 /.vscode/
 /php/
 /php-mac/
-
+/tubeinvestigation-ai/
 
 # PHPの依存関係や一時ファイル
 /php/extras/ssl/openssl.cnf
