@@ -4,17 +4,23 @@ config.json
 
 # フォルダ
 /docs/
-/LP/
 /.vscode/
 /php/
 /php-mac/
 /tubeinvestigation-ai/
+/LP/stripe-php/
+/LP/data/
+/LP/api/
 
 # PHPの依存関係や一時ファイル
 /php/extras/ssl/openssl.cnf
 *.log
 .env
-
+config.php
+**/config.php
+*.bak
+*/.htaccess
+.htaccess
 # ビルド済みファイル
 .exe
 *.app
