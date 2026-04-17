@@ -73,7 +73,7 @@
                             <!-- 【CTA 1】 -->
                             <button type="submit" class="cta-button">『TubeInvestigation AI』でリサーチ地獄から今すぐ抜け出す</button>
                             <div class="cta-micro-copy">
-                                <span>✅ 4/18 0時まで期間限定 7,980円</span>
+                                <span>✅ 買い切り版 12,800円</span>
                                 <span>✅ 動画の台本化特典付き</span>
                                 <span>✅ 30日間全額返金保証</span>
                             </div>
@@ -136,9 +136,9 @@
             <div class="container">
                 <p class="cta-text">直感とデータが融合する、新しいリサーチ体験。<br>余った時間はすべて「最高の企画づくり」へ。</p>
                 <form action="checkout.php" method="POST">
-                    <button type="submit" class="cta-button primary">特別価格でお宝動画を発掘する</button>
+                    <button type="submit" class="cta-button primary">お宝動画を発掘する</button>
                     <div class="cta-micro-copy white-text">
-                        <span>✅ 4/18 0時まで期間限定 7,980円</span>
+                        <span>✅ 買い切り版 12,800円</span>
                         <span>✅ 動画の台本化特典付き</span>
                         <span>✅ 30日間全額返金保証</span>
                     </div>
@@ -290,9 +290,9 @@
             <div class="container">
                 <p class="cta-text">「なぜ伸びたのか」が手に取るように分かる。<br>最新AIの分析力を味方につけ、「狙ってヒットを生み出す」楽しさを。</p>
                 <form action="checkout.php" method="POST">
-                    <button type="submit" class="cta-button primary">特別価格でお宝動画を発掘する</button>
+                    <button type="submit" class="cta-button primary">お宝動画を発掘する</button>
                     <div class="cta-micro-copy white-text">
-                        <span>✅ 4/18 0時まで期間限定 7,980円</span>
+                        <span>✅ 買い切り版 12,800円</span>
                         <span>✅ 動画の台本化特典付き</span>
                         <span>✅ 30日間全額返金保証</span>
                     </div>
@@ -383,7 +383,7 @@
                         </div>
                         <button type="submit" class="cta-button final">規約に同意して『TubeInvestigation AI』を導入する</button>
                         <div class="cta-micro-copy">
-                            <span>✅ 4/18 0時まで期間限定 7,980円</span>
+                            <span>✅ 買い切り版 12,800円</span>
                             <span>✅ 動画の台本化特典付き</span>
                             <span>✅ 30日間全額返金保証</span>
                         </div>
