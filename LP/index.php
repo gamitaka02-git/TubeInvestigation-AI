@@ -26,76 +26,75 @@
                 <span></span>
             </button>
             <nav id="nav-menu">
-                <a href="#features">3つの強み</a>
+                <a href="#features">4つの強み</a>
                 <a href="#details">主な仕様</a>
                 <a href="#faq">FAQ</a>
-                <a href="#purchase" class="nav-cta">お宝動画を発掘する</a>
+                <a href="#purchase" class="nav-cta">7日間無料で試してみる</a>
             </nav>
         </div>
     </header>
 
     <main>
-        <!-- 1. ファーストビュー -->
+        <!-- 1. ファーストビュー (tldv.io風の1カラムレイアウト＆巨大操作動画) -->
         <section class="hero">
-            <!-- ヒーローセクション装飾アニメーション -->
             <div class="hero-decorative-bg">
-                <!-- 要素1：大きく動く3重の円（左側テキストエリアの背景） -->
                 <div class="deco-play-btn large-cyber-circle">
                     <div class="circle-outer-layer1"></div>
                     <div class="circle-outer-layer2"></div>
                     <div class="circle-inner-layer3"></div>
-                    <div class="play-triangle"></div>
-                </div>
-
-                <!-- 要素2：大きく動く棒グラフ（右側画像エリア周辺） -->
-                <div class="deco-bar-chart large-chart">
-                    <div class="bar bar-1"></div>
-                    <div class="bar bar-2"></div>
-                    <div class="bar bar-3"></div>
-                    <div class="bar bar-4"></div>
-                    <div class="bar bar-5"></div>
                 </div>
             </div>
 
-            <div class="container">
-                <div class="hero-content">
-                    <h1 class="hero-title">企画力で伸びている<br><span
-                            class="highlight">「本当に価値のある動画」を5分で抜き出す！</span><br>
+            <div class="container hero-container-stacked">
+                <div class="hero-content-center">
+                    <span class="hero-badge">🎁 7日間の無料トライアル受付中</span>
+                    <h1 class="hero-title-center">
+                        「本当に価値のある動画」の発掘から<br>
+                        <span class="highlight">「勝てる台本」の作成まで
+                        </span><br>
+                        AIが一気通貫で加速する！
                     </h1>
-                    <p class="hero-subtitle">
-                        AIを使った分析を武器に、あなたのリサーチを単なる「作業」から、次のヒットへの<span class="keyword-highlight">「確信」</span>を生むクリエイティブな時間へと<span class="keyword-highlight">「革新」</span>する。
+                    <p class="hero-subtitle-center">
+                        リサーチから台本作成までを最新AIで一本化。<br>
+                        あなたの時間を単なる「作業」から、次のヒットへの<span class="keyword-highlight">「確信」</span>を生む時間へと<span class="keyword-highlight">「革新」</span>する。
                     </p>
-                    <div class="hero-cta">
+                    
+                    <div class="hero-cta-center">
                         <form action="checkout.php" method="POST">
-                            <div class="cta-price-container">
-                                <p class="tool-name highlight">『TubeInvestigation AI』</p>
-                            </div>
-                            <!-- 【CTA 1】 -->
-                            <button type="submit" class="cta-button">『TubeInvestigation AI』でリサーチ地獄から今すぐ抜け出す</button>
-                            <div class="cta-micro-copy">
-                                <span>✅ 買い切り版 12,800円</span>
-                                <span>✅ 動画の台本化特典付き</span>
-                                <span>✅ 30日間全額返金保証</span>
+                            <button type="submit" class="cta-button pulse-effect">7日間の無料体験を今すぐ始める</button>
+                            <div class="cta-micro-copy-center">
+                                <span>🔒 Stripeによる安全な決済登録</span>
+                                <span>⚡ 無料期間中の解約なら料金は一切不要</span>
+                                <span>💡 登録後、即座にライセンスキーを発行</span>
                             </div>
                         </form>
                     </div>
                 </div>
-                <div class="hero-image">
-                    <div class="image-placeholder">
-                        <img src="img/header01.png" alt="ヘッダーイメージ">
+
+                <!-- tldv.io風の超巨大デモ動画/GIF配置エリア -->
+                <div class="hero-video-mockup">
+                    <div class="mockup-frame">
+                        <div class="mockup-header">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                            <span class="mockup-title">TubeInvestigation AI - 実際の操作画面</span>
+                        </div>
+                        <img src="img/tool01.gif" alt="TubeInvestigation AI 動作デモ" class="mockup-gif">
                     </div>
+                    <div class="glow-effect"></div>
                 </div>
             </div>
         </section>
 
-        <!-- 2. 3つの強み -->
+        <!-- 2. 4つの強み -->
         <section id="features" class="features-section">
             <div class="container">
-                <h2 class="section-title">『TubeInvestigation AI』の「3つの強み」</h2>
+                <h2 class="section-title">『TubeInvestigation AI』の「4つの強み」</h2>
                 <div class="alternating-rows">
                     <div class="alt-row">
                         <div class="alt-row-content">
-                            <h3>1. 登録者数が少なくても企画力で爆伸びしている「お宝動画」が丸わかり</h3>
+                            <h3>1. 登録者数が少なくても企画力で爆伸びしている「本当に価値のある動画」が丸わかり</h3>
                             <p>「再生数が登録者数より圧倒的に多い動画＝バズり度」として自動算出し、純粋な「企画力で伸びている真の成功事例」だけを開始数分で抽出します。</p>
                         </div>
                         <div class="alt-row-image">
@@ -127,6 +126,18 @@
                             </div>
                         </div>
                     </div>
+                    <div class="alt-row">
+                        <div class="alt-row-content">
+                            <h3>4. リサーチ結果をそのまま「勝てる台本」へ昇華するAI台本作成機能</h3>
+                            <p>リサーチで見つけた「本当に価値のある動画」の分析データを活用し、最新AIがあなた専用の動画台本を自動生成。</p>
+                            <p>「何を話せばいいか分からない」「構成が思いつかない」という台本作成の壁を、AIが一気に突破します。</p>
+                        </div>
+                        <div class="alt-row-image">
+                            <div class="image-wrapper">
+                                <img src="img/alt-img07.png" alt="AI台本作成機能">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -136,11 +147,11 @@
             <div class="container">
                 <p class="cta-text">直感とデータが融合する、新しいリサーチ体験。<br>余った時間はすべて「最高の企画づくり」へ。</p>
                 <form action="checkout.php" method="POST">
-                    <button type="submit" class="cta-button primary">お宝動画を発掘する</button>
+                    <button type="submit" class="cta-button primary pulse-effect">7日間の無料体験を始める</button>
                     <div class="cta-micro-copy white-text">
-                        <span>✅ 買い切り版 12,800円</span>
-                        <span>✅ 動画の台本化特典付き</span>
-                        <span>✅ 30日間全額返金保証</span>
+                        <span>✅ 7日間無料体験（いつでもオンライン解約可能）</span>
+                        <span>✅ 動画の台本化特典ロードマップ付き</span>
+                        <span>✅ Stripeによる暗号化安全決済</span>
                     </div>
                 </form>
             </div>
@@ -193,6 +204,18 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="alt-row">
+                            <div class="alt-row-content">
+                                <span class="step-num">04</span>
+                                <h4>分析結果から「あなただけの台本」をAIが自動生成</h4>
+                                <p>リサーチと分析で得たデータと、あなたの指示（プロンプト）を元に、AIがあなた専用の動画台本を作成。「何を話せばいいか分からない」という壁を一瞬で突破し、リサーチから台本完成までをシームレスに実現します。</p>
+                            </div>
+                            <div class="alt-row-image">
+                                <div class="image-wrapper">
+                                    <img src="img/tool03.gif" alt="AI台本作成">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -203,12 +226,13 @@
             <div class="container">
                 <div class="bonus-wrapper">
                     <div class="bonus-content">
-                        <span class="bonus-badge">購入者限定 特別特典</span>
+                        <span class="bonus-badge">特別特典プレゼント</span>
                         <p class="bonus-subtitle" style="font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: bold;">リサーチの結果から「勝率の高い台本」を生み出す</p>
                         <h2 class="bonus-title" style="font-size: 1.8rem;">NotebookLMを使ったYouTube台本制作ロードマップ</h2>
                         <p class="bonus-desc">
                             リサーチ結果のデータをGoogleの『NotebookLM』に読み込ませ、精度の高いYouTube台本を制作する具体的なフローを解説した手順書が付属。<br>
-                            「リサーチで終わらない」、あなたの企画を最短で形にするための必須ロードマップです。
+                            「リサーチで終わらない」、あなたの企画を最短で形にするための必須ロードマップです。<br>
+                            ここで作成した企画をプロンプトにすることで、よりあなたの意図に合わせた動画台本が作成可能です。
                         </p>
                     </div>
                     <div class="bonus-image-area">
@@ -219,8 +243,6 @@
                 </div>
             </div>
         </section>
-
-
 
         <!-- 7. 仕様・特徴 -->
         <section id="details" class="details-section">
@@ -253,6 +275,7 @@
                         <ul>
                             <li><strong>CSV形式での保存：</strong>検索結果一覧をExcelで扱いやすいよう保存</li>
                             <li><strong>Markdown/PDF保存：</strong>AIの分析結果を即座にドキュメントとして保存し、チーム共有やAI連携に活用</li>
+                            <li><strong>AIによる動画台本の自動生成：</strong>分析データとあなたの指示（プロンプト）をもとに、最新AIが動画台本（.md形式）を作成。構成に悩む時間をゼロにし、リサーチから台本完成までをワンストップで実現</li>
                         </ul>
                     </div>
                     <div class="detail-group">
@@ -267,19 +290,27 @@
             </div>
         </section>
 
-        <!-- 8. 30日間全額返金保証セクション -->
-        <section class="guarantee-section">
+        <!-- 8. 無料体験と解約に関する安心設計セクション (返金保証から差し替え) -->
+        <section class="trial-info-section">
             <div class="container">
-                <div class="guarantee-box">
-                    <div class="guarantee-icon">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" fill="#10B981" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M9 12L11 14L15 10" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                <div class="trial-info-box">
+                    <div class="trial-info-header">
+                        <span class="trial-badge">安心のフリートライアル設計</span>
+                        <h2>7日間の無料トライアルについて</h2>
                     </div>
-                    <div class="guarantee-content">
-                        <h2>30日間 全額返金保証</h2>
-                        <p>使ってみて1つもお宝動画が見つからなければ、30日以内なら全額返金します。<br><strong>あなたにリスクはありません。</strong></p>
+                    <div class="trial-info-grid">
+                        <div class="info-card">
+                            <h3>💳 クレジットカード決済の登録</h3>
+                            <p>Stripeの安全な決済システムを利用し、初回登録時にカード番号の登録が必要です。7日間の無料期間が終了するまで一切の請求は発生しません。</p>
+                        </div>
+                        <div class="info-card">
+                            <h3>🔄 いつでもオンライン解約可能</h3>
+                            <p>「自分には合わなかった」と思われた場合は、管理画面等からいつでもワンクリックで解約手続きが可能です。解約のための面倒なサポート連絡などは不要です。</p>
+                        </div>
+                        <div class="info-card warning-highlight">
+                            <h3>⚠️ 解約時の即時ライセンス停止ルール</h3>
+                            <p><strong>解約手続きを完了された場合、その時点で即座にライセンスキーが解除され、本ツールはご利用いただけなくなります。</strong>（日割りでの残り期間の利用や返金はございません。体験期間の最終日まで利用されたい場合は、期間終了の間際での解約をおすすめします。）</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -290,70 +321,71 @@
             <div class="container">
                 <p class="cta-text">「なぜ伸びたのか」が手に取るように分かる。<br>最新AIの分析力を味方につけ、「狙ってヒットを生み出す」楽しさを。</p>
                 <form action="checkout.php" method="POST">
-                    <button type="submit" class="cta-button primary">お宝動画を発掘する</button>
+                    <button type="submit" class="cta-button primary pulse-effect">7日間の無料体験を始める</button>
                     <div class="cta-micro-copy white-text">
-                        <span>✅ 買い切り版 12,800円</span>
-                        <span>✅ 動画の台本化特典付き</span>
-                        <span>✅ 30日間全額返金保証</span>
+                        <span>✅ 7日間無料体験（いつでもオンライン解約可能）</span>
+                        <span>✅ 動画の台本化特典ロードマップ付き</span>
+                        <span>✅ Stripeによる暗号化安全決済</span>
                     </div>
                 </form>
             </div>
         </section>
 
-        <!-- 10. FAQ -->
+        <!-- 10. FAQ (サブスク・トライアル・即時停止仕様) -->
         <section id="faq" class="faq-section">
             <div class="container">
                 <h2 class="section-title">よくある質問（FAQ）</h2>
+                
+                <h3 class="faq-category-title">無料トライアル・ご請求について</h3>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <details>
+                            <summary>Q. 無料体験期間中に料金は発生しますか？</summary>
+                            <div class="faq-answer"><div class="faq-answer-content">A. いいえ、登録から7日間の無料体験期間中に解約手続きを行っていただければ、料金は1円もかかりません。</div></div>
+                        </details>
+                    </div>
+                    <div class="faq-item">
+                        <details>
+                            <summary>Q. 無料期間が終わるとどうなりますか？</summary>
+                            <div class="faq-answer"><div class="faq-answer-content">A. 7日間の無料体験期間が終了すると、自動的に月額サブスクリプション課金が開始されます。</div></div>
+                        </details>
+                    </div>
+                    <div class="faq-item">
+                        <details>
+                            <summary>Q. 解約はいつでもできますか？また、解約するとどうなりますか？</summary>
+                            <div class="faq-answer"><div class="faq-answer-content">A. はい、いつでもオンラインで解約可能です。ただし、解約手続きが完了した時点で即座にライセンスキーが解除され、ツールはご利用いただけなくなりますのでご注意ください。（体験期間を最大限利用されたい場合は、期間終了直前の解約をおすすめします。）</div></div>
+                        </details>
+                    </div>
+                </div>
+
                 <h3 class="faq-category-title">動作環境・ライセンスについて</h3>
                 <div class="faq-list">
                     <div class="faq-item">
                         <details>
-                            <summary>Q. 対応するOSを教えてください。<svg class="faq-border-svg" preserveAspectRatio="none"><rect x="0" y="0" width="100%" height="100%" pathLength="100" /></svg></summary>
+                            <summary>Q. 対応するOSを教えてください。</summary>
                             <div class="faq-answer"><div class="faq-answer-content">A. Windows 11、およびmacOS（Intelプロセッサ / Apple Silicon搭載機）の両方に対応しています。Mac版はユニバーサルバイナリ形式のため、どのモデルでもネイティブに動作します。</div></div>
                         </details>
                     </div>
                     <div class="faq-item">
                         <details>
-                            <summary>Q. 1ライセンスで何台のPCまで使えますか？<svg class="faq-border-svg" preserveAspectRatio="none"><rect x="0" y="0" width="100%" height="100%" pathLength="100" /></svg></summary>
+                            <summary>Q. 1ライセンスで何台のPCまで使えますか？</summary>
                             <div class="faq-answer"><div class="faq-answer-content">A. 1つのライセンスにつき、最大2台のデバイスまで同時に認証して利用することができます。</div></div>
-                        </details>
-                    </div>
-                    <div class="faq-item">
-                        <details>
-                            <summary>Q. PCを買い替えた場合はどうすればいいですか？<svg class="faq-border-svg" preserveAspectRatio="none"><rect x="0" y="0" width="100%" height="100%" pathLength="100" /></svg></summary>
-                            <div class="faq-answer"><div class="faq-answer-content">A. ツール内の設定画面より、ご自身で認証解除を行うことができます。サポートの返信を待つ必要はなく、いつでも即座に新しいPCへ移行できます。</div></div>
                         </details>
                     </div>
                 </div>
 
-                <h3 class="faq-category-title">ネットワーク・セキュリティについて</h3>
+                <h3 class="faq-category-title">ネットワーク・セキュリティ・APIについて</h3>
                 <div class="faq-list">
                     <div class="faq-item">
                         <details>
-                            <summary>Q. インターネット環境は必要ですか？<svg class="faq-border-svg" preserveAspectRatio="none"><rect x="0" y="0" width="100%" height="100%" pathLength="100" /></svg></summary>
+                            <summary>Q. インターネット環境は必要ですか？</summary>
                             <div class="faq-answer"><div class="faq-answer-content">A. はい、YouTube Data API v3やGemini APIを利用するため、通信環境が必要です。</div></div>
                         </details>
                     </div>
                     <div class="faq-item">
                         <details>
-                            <summary>Q. 初回起動時のセキュリティ警告について。<svg class="faq-border-svg" preserveAspectRatio="none"><rect x="0" y="0" width="100%" height="100%" pathLength="100" /></svg></summary>
-                            <div class="faq-answer"><div class="faq-answer-content">A. 個人開発ソフトウェアのためOSの保護機能が反応する場合があります。Windowsは「詳細情報」＞「実行」、Macは設定の「プライバシーとセキュリティ」から「このまま開く」を選択してください。</div></div>
-                        </details>
-                    </div>
-                </div>
-
-                <h3 class="faq-category-title">API・保証について</h3>
-                <div class="faq-list">
-                    <div class="faq-item">
-                        <details>
-                            <summary>Q. APIの利用制限はありますか？<svg class="faq-border-svg" preserveAspectRatio="none"><rect x="0" y="0" width="100%" height="100%" pathLength="100" /></svg></summary>
-                            <div class="faq-answer"><div class="faq-answer-content">A. YouTube APIは無料枠内で十分利用可能で、上限に達しても翌日リセットされます。Gemini APIは1日最大10回までの分析が無料枠で可能です。</div></div>
-                        </details>
-                    </div>
-                    <div class="faq-item">
-                        <details>
-                            <summary>Q. 30日間全額返金保証について教えてください。<svg class="faq-border-svg" preserveAspectRatio="none"><rect x="0" y="0" width="100%" height="100%" pathLength="100" /></svg></summary>
-                            <div class="faq-answer"><div class="faq-answer-content">A. ご購入から30日以内であれば、ツールを活用してお宝動画が見つからなかった場合に限り、お申し出により全額を返金いたします。</div></div>
+                            <summary>Q. APIの利用制限はありますか？</summary>
+                            <div class="faq-answer"><div class="faq-answer-content">A. YouTube APIは無料枠内で十分利用可能で、上限に達しても翌日リセットされます。Gemini APIの無料枠ではツール側で「Gemini 3.1 Flash Lite」に設定していただきますと、1日最大200回近くまで動画分析および台本作成が可能です。それ以外は1日最大10回程度です。APIの利用が制限された場合でも、制限は基本的に翌日にリセットされます。</div></div>
                         </details>
                     </div>
                 </div>
@@ -370,22 +402,23 @@
                 </div>
 
                 <div id="purchase" class="purchase-box">
-                    <h3>⚠️ ご購入の前に必ずご確認ください</h3>
+                    <h3>⚠️ ご登録の前に必ずご確認ください</h3>
                     <p class="warning-intro">本ツールは以下の必須事項への同意が必要です。あらかじめご了承の上お進みください。</p>
                     <ol class="warning-list">
-                        <li><strong>ライセンスキーの再発行不可</strong>：紛失時の再発行等は一切行っておりません。</li>
                         <li><strong>APIの別途用意</strong>：ご自身の「YouTube Data API v3」および「Gemini API」キーが必要です。</li>
-                        <li><strong>返金保証の適用</strong>：30日間の全額返金保証は、所定の条件を満たした場合に適用されます。</li>
+                        <li><strong>解約時の即時ライセンス無効化</strong>：解約手続き完了と同時にライセンスキーは即座に解除され、ツールは利用不可となります。</li>
+                        <li><strong>動作環境の確認</strong>：Windows 11またはmacOSでのローカル動作に対応しています。</li>
                     </ol>
                     <form action="checkout.php" method="POST">
                         <div class="cta-price-container" style="margin-top:20px; text-align:center;">
                             <p class="tool-name highlight">『TubeInvestigation AI』</p>
+                            <p class="subscription-price-notice" style="font-size: 1.1rem; color: #a1a1aa; margin-top: 5px;">7日間無料体験トライアル（体験終了後：自動更新月額サブスクリプション）</p>
                         </div>
-                        <button type="submit" class="cta-button final">規約に同意して『TubeInvestigation AI』を導入する</button>
+                        <button type="submit" class="cta-button final pulse-effect">規約に同意して『7日間無料体験』を始める</button>
                         <div class="cta-micro-copy">
-                            <span>✅ 買い切り版 12,800円</span>
-                            <span>✅ 動画の台本化特典付き</span>
-                            <span>✅ 30日間全額返金保証</span>
+                            <span>✅ 7日間無料体験<br>（いつでもオンライン解約可能）</span>
+                            <span>✅ 登録時に即時ライセンスキーを発行</span>
+                            <span>✅ Stripeによる安全な決済登録</span>
                         </div>
                     </form>
                 </div>
@@ -405,4 +438,5 @@
     </footer>
     <script src="script.js"></script>
 </body>
+
 </html>

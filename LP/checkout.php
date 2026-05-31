@@ -46,7 +46,13 @@ try {
             'price'    => $stripePriceId,
             'quantity' => 1,
         ]],
-        'mode'     => 'payment',
+        'mode'     => 'subscription',
+        'subscription_data' => [
+            'trial_period_days' => 7,
+            'metadata' => [
+                'product' => 'tube_investigation_ai_pro',
+            ]
+        ],
         'metadata' => [
             'product' => 'tube_investigation_ai_pro',
         ],

@@ -11,6 +11,7 @@ config.json
 /LP/stripe-php/
 /LP/data/
 /LP/api/
+/LP_old/
 
 # PHPの依存関係や一時ファイル
 /php/extras/ssl/openssl.cnf
