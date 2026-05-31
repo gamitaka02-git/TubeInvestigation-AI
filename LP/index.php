@@ -212,7 +212,7 @@
                             </div>
                             <div class="alt-row-image">
                                 <div class="image-wrapper">
-                                    <img src="img/tool03.gif" alt="AI台本作成">
+                                    <img src="img/tool04.gif" alt="AI台本作成">
                                 </div>
                             </div>
                         </div>
