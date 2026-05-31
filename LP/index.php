@@ -61,10 +61,12 @@
                     
                     <div class="hero-cta-center">
                         <form action="checkout.php" method="POST">
+                            <p class="cta-price-notice-hero" style="color: #a1a1aa; margin-bottom: 10px; font-size: 1.1rem; font-weight: bold;">7日間無料体験（体験終了後：月額980円・税込）</p>
                             <button type="submit" class="cta-button pulse-effect">7日間の無料体験を今すぐ始める</button>
                             <div class="cta-micro-copy-center">
                                 <span>🔒 Stripeによる安全な決済登録</span>
                                 <span>⚡ 無料期間中の解約なら料金は一切不要</span>
+                                <span>💰 月額980円（税込）※体験終了後に課金</span>
                                 <span>💡 登録後、即座にライセンスキーを発行</span>
                             </div>
                         </form>
@@ -147,9 +149,11 @@
             <div class="container">
                 <p class="cta-text">直感とデータが融合する、新しいリサーチ体験。<br>余った時間はすべて「最高の企画づくり」へ。</p>
                 <form action="checkout.php" method="POST">
+                    <p class="cta-price-notice" style="color: #e4e4e7; margin-bottom: 15px; font-weight: bold; font-size: 1.1rem;">7日間無料体験（体験終了後：月額980円・税込）</p>
                     <button type="submit" class="cta-button primary pulse-effect">7日間の無料体験を始める</button>
                     <div class="cta-micro-copy white-text">
                         <span>✅ 7日間無料体験（いつでもオンライン解約可能）</span>
+                        <span>✅ 月額980円・税込（無料期間中の解約は0円）</span>
                         <span>✅ 動画の台本化特典ロードマップ付き</span>
                         <span>✅ Stripeによる暗号化安全決済</span>
                     </div>
@@ -321,9 +325,11 @@
             <div class="container">
                 <p class="cta-text">「なぜ伸びたのか」が手に取るように分かる。<br>最新AIの分析力を味方につけ、「狙ってヒットを生み出す」楽しさを。</p>
                 <form action="checkout.php" method="POST">
+                    <p class="cta-price-notice" style="color: #e4e4e7; margin-bottom: 15px; font-weight: bold; font-size: 1.1rem;">7日間無料体験（体験終了後：月額980円・税込）</p>
                     <button type="submit" class="cta-button primary pulse-effect">7日間の無料体験を始める</button>
                     <div class="cta-micro-copy white-text">
                         <span>✅ 7日間無料体験（いつでもオンライン解約可能）</span>
+                        <span>✅ 月額980円・税込（無料期間中の解約は0円）</span>
                         <span>✅ 動画の台本化特典ロードマップ付き</span>
                         <span>✅ Stripeによる暗号化安全決済</span>
                     </div>
@@ -347,7 +353,7 @@
                     <div class="faq-item">
                         <details>
                             <summary>Q. 無料期間が終わるとどうなりますか？</summary>
-                            <div class="faq-answer"><div class="faq-answer-content">A. 7日間の無料体験期間が終了すると、自動的に月額サブスクリプション課金が開始されます。</div></div>
+                            <div class="faq-answer"><div class="faq-answer-content">A. 7日間の無料体験期間が終了すると、自動的に月額サブスクリプション課金（月額980円・税込）が開始されます。</div></div>
                         </details>
                     </div>
                     <div class="faq-item">
@@ -412,11 +418,12 @@
                     <form action="checkout.php" method="POST">
                         <div class="cta-price-container" style="margin-top:20px; text-align:center;">
                             <p class="tool-name highlight">『TubeInvestigation AI』</p>
-                            <p class="subscription-price-notice" style="font-size: 1.1rem; color: #a1a1aa; margin-top: 5px;">7日間無料体験トライアル（体験終了後：自動更新月額サブスクリプション）</p>
+                            <p class="subscription-price-notice" style="font-size: 1.1rem; color: #a1a1aa; margin-top: 5px;">7日間無料体験トライアル（体験終了後：自動更新 月額980円・税込）</p>
                         </div>
                         <button type="submit" class="cta-button final pulse-effect">規約に同意して『7日間無料体験』を始める</button>
                         <div class="cta-micro-copy">
                             <span>✅ 7日間無料体験<br>（いつでもオンライン解約可能）</span>
+                            <span>✅ 月額980円・税込（無料期間中の解約は0円）</span>
                             <span>✅ 登録時に即時ライセンスキーを発行</span>
                             <span>✅ Stripeによる安全な決済登録</span>
                         </div>
